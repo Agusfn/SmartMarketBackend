@@ -3,21 +3,28 @@ import sequelize from "../database/sequelize";
 import { Portfolio } from "./Portfolio";
 import { Asset } from "./Asset";
 
+export enum MovementType {
+    DEPOSIT = "deposit",
+    WITHDRAW = "withdraw",
+    ASSET_BUY = "asset_buy",
+    ASSET_SELL = "asset_sell"
+}
 
-export class AssetPosition extends Model<InferAttributes<AssetPosition>, InferCreationAttributes<AssetPosition>> {
+export class PortfolioMovement extends Model<InferAttributes<PortfolioMovement>, InferCreationAttributes<PortfolioMovement>> {
     
     declare id: number | null;
     declare portfolio_id: number;
-    declare asset_id: number;
-    declare asset_amount: number;
-    declare asset_unit_value: number;
-    declare asset_total_value: number;
-    declare last_asset_value_update: Date;
+    declare movement_type: MovementType;
+    declare date: Date;
+    declare movement_amount: number;
+    declare asset_id: number | null;
+
+    // to-do: limits
 
 }
 
 
-AssetPosition.init({
+PortfolioMovement.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -31,55 +38,50 @@ AssetPosition.init({
             key: "id"
         }
     },
+    movement_type: {
+        type: DataTypes.STRING(50),
+        allowNull: false
+    },
+    date: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+    movement_amount: {
+        type: DataTypes.DOUBLE,
+        allowNull: false
+    },
     asset_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: "asset",
             key: "id"
         }
-    },
-    asset_amount: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    asset_unit_value: {
-        type: DataTypes.DOUBLE,
-        allowNull: false
-    },
-    asset_total_value: {
-        type: DataTypes.DOUBLE,
-        allowNull: false
-    },
-    last_asset_value_update: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: () => new Date()
     }
 }, {
-    tableName: "asset_position",
+    tableName: "portfolio_movement",
     sequelize,
-    modelName: "AssetPosition",
+    modelName: "PortfolioMovement",
     timestamps: false
 });
 
 
-AssetPosition.belongsTo(Portfolio, {
+PortfolioMovement.belongsTo(Portfolio, {
     foreignKey: "portfolio_id",
     onUpdate: "CASCADE",
     onDelete: "RESTRICT",
     as: "portfolio"
 });
 
-Portfolio.hasMany(AssetPosition, {
+Portfolio.hasMany(PortfolioMovement, {
     foreignKey: "portfolio_id",
     onUpdate: "CASCADE",
     onDelete: "RESTRICT",
-    as: "asset_positions"
+    as: "movements"
 });
 
 
-AssetPosition.belongsTo(Asset, {
+PortfolioMovement.belongsTo(Asset, {
     foreignKey: "asset_id",
     onUpdate: "CASCADE",
     onDelete: "RESTRICT",
