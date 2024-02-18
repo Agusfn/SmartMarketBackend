@@ -68,20 +68,6 @@ AssetPosition.init({
 });
 
 
-AssetPosition.belongsTo(Portfolio, {
-    foreignKey: "portfolio_id",
-    onUpdate: "CASCADE",
-    onDelete: "RESTRICT",
-    as: "portfolio"
-});
-
-Portfolio.hasMany(AssetPosition, {
-    foreignKey: "portfolio_id",
-    onUpdate: "CASCADE",
-    onDelete: "RESTRICT",
-    as: "asset_positions"
-});
-
 
 AssetPosition.belongsTo(Asset, {
     foreignKey: "asset_id",

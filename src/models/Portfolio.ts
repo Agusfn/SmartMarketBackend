@@ -9,6 +9,7 @@ import { AssetPosition } from "./AssetPosition";
 export class Portfolio extends Model<InferAttributes<Portfolio>, InferCreationAttributes<Portfolio>> {
     
     declare id: number | null;
+    declare decision_engine_code: number | null;
     declare name: string;
     declare available_balance: number;
     declare net_worth: number;
@@ -36,6 +37,14 @@ Portfolio.init({
         autoIncrement: true,
         primaryKey: true
     },
+    decision_engine_code: {
+        type: DataTypes.STRING(50),
+        allowNull: true,
+        references: {
+            model: "decision_engine_data",
+            key: "code"
+        }
+    },
     name: {
         type: DataTypes.STRING(100),
         allowNull: false
@@ -59,7 +68,19 @@ Portfolio.init({
     tableName: "portfolio",
     sequelize,
     modelName: "Portfolio",
-    timestamps: false
+    timestamps: false,
+    defaultScope: {
+        include: [{
+            model: DecisionEngineData,
+            as: "decision_engine_data"
+        }, {
+            model: BrokerAccount,
+            as: "broker_account"
+        }, {
+            model: AssetPosition,
+            as: "asset_positions"
+        }]
+    }
 });
 
 
@@ -79,15 +100,29 @@ BrokerAccount.hasMany(Portfolio, {
 
 
 Portfolio.belongsTo(DecisionEngineData, {
-    foreignKey: "decision_engine_data_id",
+    foreignKey: "decision_engine_code",
     onUpdate: "CASCADE",
     onDelete: "RESTRICT",
     as: "decision_engine_data"
 });
 
 DecisionEngineData.hasMany(Portfolio, {
-    foreignKey: "decision_engine_data_id",
+    foreignKey: "decision_engine_code",
     onUpdate: "CASCADE",
     onDelete: "RESTRICT",
     as: "portfolios"
+});
+
+AssetPosition.belongsTo(Portfolio, {
+    foreignKey: "portfolio_id",
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT",
+    as: "portfolio"
+});
+
+Portfolio.hasMany(AssetPosition, {
+    foreignKey: "portfolio_id",
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT",
+    as: "asset_positions"
 });

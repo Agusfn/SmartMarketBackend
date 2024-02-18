@@ -1,5 +1,5 @@
 import { Portfolio } from "../../models";
-import { TestDecisionEngine } from "./TestDecisionEngine";
+import { RandomDecisionEngine } from "./TestDecisionEngine";
 import { MarketDataServiceI } from "../market-data-services/MarketDataServiceI";
 import { DecisionEngineCodes } from "../../types";
 
@@ -20,8 +20,8 @@ export interface DecisionEngineI {
 export class DecisionEngineFactory {
 
     static getEngine(engineCode: string): DecisionEngineI {
-        if(engineCode == DecisionEngineCodes.TEST_ENGINE) {
-            return new TestDecisionEngine();
+        if(engineCode == DecisionEngineCodes.RANDOM_ENGINE) {
+            return new RandomDecisionEngine();
         } else {
             throw new Error("Decision engine code '"+engineCode+"' doesn't exist in system.");
         }

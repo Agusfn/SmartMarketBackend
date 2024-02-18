@@ -1,19 +1,21 @@
 require('dotenv').config();
 import sequelize from "./database/sequelize"
-import { BrokerAccountType } from "./models";
+import { BrokerAccountType, DecisionEngineData, Portfolio } from "./models";
+import { PortfolioDecisionManager } from "./services/PortfolioDecisionManager";
 import { BrokerAccountManagerFactory } from "./services/account-managers/BrokerAccountManagerFactory";
 
 (async () => {
 
-    // try {
-    //     await sequelize.authenticate();
-    //     console.log('Connection has been established successfully.');
-    //   } catch (error) {
-    //     console.error('Unable to connect to the database:', error);
-    // }
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
 
-    const accManager = BrokerAccountManagerFactory.getManager(BrokerAccountType.ALPACA_PAPER);
-    await accManager.buy("", 0);    
+    // const accManager = BrokerAccountManagerFactory.getManager(BrokerAccountType.ALPACA_PAPER);
+    // await accManager.buy("", 0);    
+
+    const portfolio = await Portfolio.findByPk(3);
+    
+    const decisionManager = new PortfolioDecisionManager(portfolio!);
+    await decisionManager.processDecisions();
 
 })();
 
