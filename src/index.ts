@@ -1,14 +1,19 @@
 require('dotenv').config();
 import sequelize from "./database/sequelize"
+import { BrokerAccountType } from "./models";
+import { BrokerAccountManagerFactory } from "./services/account-managers/BrokerAccountManagerFactory";
 
 (async () => {
 
-    try {
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-      } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
+    // try {
+    //     await sequelize.authenticate();
+    //     console.log('Connection has been established successfully.');
+    //   } catch (error) {
+    //     console.error('Unable to connect to the database:', error);
+    // }
+
+    const accManager = BrokerAccountManagerFactory.getManager(BrokerAccountType.ALPACA_PAPER);
+    await accManager.buy("", 0);    
 
 })();
 

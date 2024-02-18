@@ -1,4 +1,4 @@
-import { DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
+import { BelongsToGetAssociationMixin, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
 import sequelize from "../database/sequelize";
 import { Portfolio } from "./Portfolio";
 import { Asset } from "./Asset";
@@ -13,6 +13,10 @@ export class AssetPosition extends Model<InferAttributes<AssetPosition>, InferCr
     declare asset_unit_value: number;
     declare asset_total_value: number;
     declare last_asset_value_update: Date;
+
+    // mixins
+    declare getPortfolio: BelongsToGetAssociationMixin<Portfolio>;
+    declare getAsset: BelongsToGetAssociationMixin<Asset>;
 
 }
 

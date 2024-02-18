@@ -1,4 +1,4 @@
-import { DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
+import { BelongsToGetAssociationMixin, DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute } from "sequelize";
 import sequelize from "../database/sequelize";
 import { Portfolio } from "./Portfolio";
 import { Asset } from "./Asset";
@@ -20,6 +20,13 @@ export class PortfolioMovement extends Model<InferAttributes<PortfolioMovement>,
     declare asset_id: number | null;
 
     // to-do: limits
+
+    // eager load
+    declare asset?: NonAttribute<Asset>;
+
+    // mixins
+    declare getPortfolio: BelongsToGetAssociationMixin<Portfolio>;
+    declare getAsset: BelongsToGetAssociationMixin<Asset>;
 
 }
 

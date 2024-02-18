@@ -1,15 +1,13 @@
-import { DecisionEngineI } from "../DecisionEngineFactory";
+import { Portfolio } from "../../models";
+import { DecisionEngineI } from "./DecisionEngineFactory";
+import { MarketDataServiceI } from "../market-data-services/MarketDataServiceI";
 
 export class TestDecisionEngine implements DecisionEngineI {
 
-    loadPortfolio() {
-        throw new Error("Method not implemented.");
-    }
-    async processSuggestions() {
-        throw new Error("Method not implemented.");
-    }
-    returnSuggestions() {
+    
+    async processSuggestions(portfolio: Portfolio, marketDataService: MarketDataServiceI) {
         return [];
     }
+
     
 }

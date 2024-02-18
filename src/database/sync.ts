@@ -1,5 +1,5 @@
 require('dotenv').config();
-import { Account, Asset, AssetPosition, DecisionEngineData, Portfolio, PortfolioMovement } from "../models";
+import { BrokerAccount, Asset, AssetPosition, DecisionEngineData, Portfolio, PortfolioMovement } from "../models";
 
 
 (async () => {
@@ -7,7 +7,7 @@ import { Account, Asset, AssetPosition, DecisionEngineData, Portfolio, Portfolio
 
     await Asset.sync({ alter: true });
     await DecisionEngineData.sync({ alter: true });
-    await Account.sync({ alter: true });
+    await BrokerAccount.sync({ alter: true });
     await Portfolio.sync({ alter: true });
     await AssetPosition.sync({ alter: true });
     await PortfolioMovement.sync({ alter: true });

@@ -1,26 +1,25 @@
-import { DecisionEngineFactory, DecisionEngineI, SuggestionI } from "./DecisionEngineFactory";
-import { AccountManagerFactory, AccountManagerI } from "./account-managers/AccountManagerFactory";
+import { Portfolio } from "../models";
+import { DecisionEngineFactory, DecisionEngineI, SuggestionI } from "./decision-engines/DecisionEngineFactory";
+import { BrokerAccountManagerFactory, BrokerAccountManagerI } from "./account-managers/BrokerAccountManagerFactory";
+import { AlpacaMarketDataService } from "./market-data-services/AlpacaMarketDataService";
 
 export class PortfolioDecisionManager {
 
-    private portfolio: any;
-    private marketData: any; // query class for market data
-    
     private suggestions: SuggestionI[] = [];
 
+    // Services
     private decisionEngine: DecisionEngineI;
-    private accountManager: AccountManagerI;
+    private accountManager: BrokerAccountManagerI;
+    private marketDataService = new AlpacaMarketDataService();
 
-    constructor(portfolio: any) {
+    constructor(private portfolio: Portfolio) {
         this.portfolio = portfolio;
-        this.decisionEngine = DecisionEngineFactory.getEngine(portfolio.engine.code);
-        this.accountManager = AccountManagerFactory.getAccountManager(this.portfolio.account);
+        this.decisionEngine = DecisionEngineFactory.getEngine(portfolio.decision_engine_data!.code);
+        this.accountManager = BrokerAccountManagerFactory.getManager(this.portfolio.broker_account!.account_type);
     }
 
     public async processDecisions(): Promise<void> {
-        this.decisionEngine.loadPortfolio(this.portfolio);
-        await this.decisionEngine.processSuggestions();
-        this.suggestions = this.decisionEngine.returnSuggestions();
+        this.suggestions = await this.decisionEngine.processSuggestions(this.portfolio, this.marketDataService);
     }
 
     public getSuggestions() {

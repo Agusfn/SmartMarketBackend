@@ -14,6 +14,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@master-chief/alpaca": "^6.3.20",
     "dotenv": "^16.4.4",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",

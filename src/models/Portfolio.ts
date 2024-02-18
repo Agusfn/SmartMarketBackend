@@ -1,7 +1,9 @@
-import { DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
+import { BelongsToGetAssociationMixin, DataTypes, HasManyGetAssociationsMixin, InferAttributes, InferCreationAttributes, Model, NonAttribute } from "sequelize";
 import sequelize from "../database/sequelize";
 import { DecisionEngineData } from "./DecisionEngineData";
-import { Account } from "./Account";
+import { BrokerAccount } from "./BrokerAccount";
+import { PortfolioMovement } from "./PortfolioMovement";
+import { AssetPosition } from "./AssetPosition";
 
 
 export class Portfolio extends Model<InferAttributes<Portfolio>, InferCreationAttributes<Portfolio>> {
@@ -12,6 +14,17 @@ export class Portfolio extends Model<InferAttributes<Portfolio>, InferCreationAt
     declare last_net_worth_update: Date;
 
     // to-do: limits
+
+    // eager loaded
+    declare broker_account?: NonAttribute<BrokerAccount>;
+    declare decision_engine_data?: NonAttribute<DecisionEngineData>;
+    declare asset_positions?: NonAttribute<AssetPosition[]>;
+
+    // mixins
+    declare getAccount: BelongsToGetAssociationMixin<BrokerAccount>;
+    declare getDecisionEngineData: BelongsToGetAssociationMixin<DecisionEngineData>;
+    declare getMovements: HasManyGetAssociationsMixin<PortfolioMovement>;
+    declare getAssetPositions: HasManyGetAssociationsMixin<AssetPosition>;
 
 }
 
@@ -45,15 +58,15 @@ Portfolio.init({
 });
 
 
-Portfolio.belongsTo(Account, {
-    foreignKey: "account_id",
+Portfolio.belongsTo(BrokerAccount, {
+    foreignKey: "broker_account_id",
     onUpdate: "CASCADE",
     onDelete: "RESTRICT",
-    as: "account"
+    as: "broker_account"
 });
 
-Account.hasMany(Portfolio, {
-    foreignKey: "account_id",
+BrokerAccount.hasMany(Portfolio, {
+    foreignKey: "broker_account_id",
     onUpdate: "CASCADE",
     onDelete: "RESTRICT",
     as: "portfolios"
