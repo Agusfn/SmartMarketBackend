@@ -9,6 +9,7 @@ import { AssetPosition } from "./AssetPosition";
 export class Portfolio extends Model<InferAttributes<Portfolio>, InferCreationAttributes<Portfolio>> {
     
     declare id: number | null;
+    declare name: string;
     declare available_balance: number;
     declare net_worth: number;
     declare last_net_worth_update: Date;
@@ -34,6 +35,10 @@ Portfolio.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
+    },
+    name: {
+        type: DataTypes.STRING(100),
+        allowNull: false
     },
     available_balance: {
         type: DataTypes.DOUBLE,

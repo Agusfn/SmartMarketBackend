@@ -6,6 +6,7 @@ import sequelize from "../database/sequelize";
 export class DecisionEngineData extends Model<InferAttributes<DecisionEngineData>, InferCreationAttributes<DecisionEngineData>> {
     
     declare id: number | null;
+    declare name: string;
     /** Code that hardcode-links this entity with the actual source code of the decision engine. */
     declare code: string;
     /** Description of the implementation of the decisions, including the risk management and all relevant information. */
@@ -20,6 +21,10 @@ DecisionEngineData.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
+    },
+    name: {
+        type: DataTypes.STRING(100),
+        allowNull: false
     },
     code: {
         type: DataTypes.STRING(50),
