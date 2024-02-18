@@ -1,4 +1,4 @@
-import { AlpacaClient } from "@master-chief/alpaca";
+import { AlpacaClient, Asset as AlpacaAsset } from "@master-chief/alpaca";
 import { MarketDataServiceI } from "./MarketDataServiceI";
 
 /**
@@ -13,14 +13,23 @@ export class AlpacaMarketDataService implements MarketDataServiceI {
             credentials: {
                 key: process.env.ALPACA_KEY_PAPER!,
                 secret: process.env.ALPACA_SECRET_PAPER!,
-                // access_token: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-                paper: false,
+                paper: true,
             },
             rate_limit: true,
         });
     }
 
-    public async getHistoryOfStock(symbol: string): Promise<any> {
+    
+    public async getActiveAssets(exchange?: string): Promise<AlpacaAsset[]> {
+        const assets = await this.client.getAssets({ status: "active" });
+        if(exchange) {
+            return assets.filter(asset => asset.exchange == exchange);
+        } else {
+            return assets;
+        }
+    }
+
+    public async a() {
 
     }
 

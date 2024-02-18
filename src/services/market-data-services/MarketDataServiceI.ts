@@ -1,5 +1,5 @@
 export interface MarketDataServiceI {
 
-    getHistoryOfStock(symbol: string): Promise<any>;
+    getActiveAssets(symbol: string): Promise<any>;
 
 }

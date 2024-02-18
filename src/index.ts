@@ -12,7 +12,7 @@ import { BrokerAccountManagerFactory } from "./services/account-managers/BrokerA
     // const accManager = BrokerAccountManagerFactory.getManager(BrokerAccountType.ALPACA_PAPER);
     // await accManager.buy("", 0);    
 
-    const portfolio = await Portfolio.findByPk(3);
+    const portfolio = await Portfolio.findByPk(1);
     
     const decisionManager = new PortfolioDecisionManager(portfolio!);
     await decisionManager.processDecisions();
@@ -20,6 +20,9 @@ import { BrokerAccountManagerFactory } from "./services/account-managers/BrokerA
 })();
 
 
+process.on('unhandledRejection', (error: any) => {
+    console.error('Unhandled Promise Rejection:', error);
+});
 
 // timer each fixed number of time
     // for each portfolio that has to run its decision engine again according to their engine run rules:

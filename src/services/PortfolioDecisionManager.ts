@@ -28,6 +28,8 @@ export class PortfolioDecisionManager {
 
     public async executeSuggestions() {
 
+        // to-do: validate suggestions according to funds and positions
+
         for(const suggestion of this.suggestions) {
             if(suggestion.action == "buy") {
                 await this.accountManager.buy(suggestion.symbol, suggestion.qty);

@@ -1,5 +1,5 @@
 import { Portfolio } from "../../models";
-import { RandomDecisionEngine } from "./TestDecisionEngine";
+import { RandomDecisionEngine } from "./RandomDecisionEngine";
 import { MarketDataServiceI } from "../market-data-services/MarketDataServiceI";
 import { DecisionEngineCodes } from "../../types";
 
